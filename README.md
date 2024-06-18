@@ -11,3 +11,5 @@ TP4: Equivalent Strings - CodeForces 559B https://vjudge.net/problem/CodeForces-
 TP5: Wine trading in Gergovia SPOJ - GERGOVIA https://vjudge.net/problem/SPOJ-GERGOVIA/origin
 
 TP6: Swap Letters CodeForces - 1215C https://vjudge.net/problem/CodeForces-1215C/origin
+
+TP9:  Anti Brute Force Lock UVA - 1235 https://vjudge.net/problem/UVA-1235/origin
