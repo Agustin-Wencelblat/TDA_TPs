@@ -15,3 +15,5 @@ TP6: Swap Letters CodeForces - 1215C https://vjudge.net/problem/CodeForces-1215C
 TP9: Anti Brute Force Lock UVA - 1235 https://vjudge.net/problem/UVA-1235/origin
 
 TP10: Lift Hopping UVA - 10801 https://vjudge.net/problem/UVA-10801/origin
+
+TP11 King UVA - 515 https://vjudge.net/problem/UVA-515/origin
