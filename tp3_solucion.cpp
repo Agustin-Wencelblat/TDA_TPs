@@ -3,47 +3,62 @@
 #include <algorithm>
 using namespace std;
 
-int main() {
-    int c;
-    cin >> c;
+// Función para procesar cada conjunto de datos
+void procesarConjunto() {
+    int numArboles, alturaMaxima, alturaPerdida;
+    cin >> numArboles >> alturaMaxima >> alturaPerdida;
 
-    while (c--) {
-        int t, h, f;
-        cin >> t >> h >> f;
-
-        vector<vector<int>> acorns(t, vector<int>(h + 1, 0));
-
-        // Leer alturas de las bellotas en cada árbol
-        for (int i = 0; i < t; ++i) {
-            int a;
-            cin >> a;
-            for (int j = 0; j < a; ++j) {
-                int n;
-                cin >> n;
-                acorns[i][n]++;
-            }
+    // Matriz que almacena la cantidad de bellotas en cada altura de cada árbol
+    vector<vector<int>> bellotasPorArbol(numArboles, vector<int>(alturaMaxima + 1, 0));
+    
+    // Leer las bellotas y llenar la matriz bellotasPorArbol
+    for (int i = 0; i < numArboles; ++i) {
+        int numBellotas;
+        cin >> numBellotas;
+        for (int j = 0; j < numBellotas; ++j) {
+            int altura;
+            cin >> altura;
+            bellotasPorArbol[i][altura]++;
         }
+    }
 
-        vector<int> dp(h + 1, 0);
+    // Matriz para almacenar el número máximo de bellotas que se pueden recoger desde cada árbol y altura
+    vector<vector<int>> bellotasMaximas(numArboles, vector<int>(alturaMaxima + 1, 0));
 
-        // Llenar dp para la altura más baja
-        for (int i = 0; i < t; ++i) {
-            dp[h] = max(dp[h], acorns[i][h]);
-        }
+    // Vector para almacenar la cantidad máxima de bellotas que se pueden recoger en cada altura considerando todos los árboles
+    vector<int> bellotasAcumuladas(alturaMaxima + 1, 0);
 
-        // Iterar desde la segunda altura más baja hasta la base
-        for (int height = h - 1; height >= 0; --height) {
-            for (int tree = 0; tree < t; ++tree) {
-                int add = acorns[tree][height + 1];
-                if (height + f <= h) {
-                    add = max(add, dp[height + f]);
+    // Calcular la cantidad máxima de bellotas que se pueden recoger en cada árbol y altura
+    for (int altura = 0; altura <= alturaMaxima; ++altura) {
+        for (int i = 0; i < numArboles; ++i) {
+            // Si estamos en la base del árbol, el valor es simplemente la cantidad de bellotas en esa altura
+            if (altura == 0) {
+                bellotasMaximas[i][altura] = bellotasPorArbol[i][altura];
+            } else {
+                // Si Jayjay se queda en el mismo árbol
+                bellotasMaximas[i][altura] = bellotasMaximas[i][altura - 1] + bellotasPorArbol[i][altura];
+                // Si Jayjay vuela a este árbol desde otro árbol
+                if (altura >= alturaPerdida) {
+                    bellotasMaximas[i][altura] = max(bellotasMaximas[i][altura], bellotasAcumuladas[altura - alturaPerdida] + bellotasPorArbol[i][altura]);
                 }
-                acorns[tree][height] += add;
-                dp[height] = max(dp[height], acorns[tree][height]);
             }
+            // Actualizar el vector de máxima cantidad de bellotas
+            bellotasAcumuladas[altura] = max(bellotasAcumuladas[altura], bellotasMaximas[i][altura]);
         }
+    }
 
-        cout << dp[0] << endl;
+    // La cantidad máxima de bellotas que Jayjay puede recoger al bajar de los árboles es el valor máximo en bellotasAcumuladas[alturaMaxima]
+    cout << bellotasAcumuladas[alturaMaxima] << endl;
+}
+
+int main() {
+    ios::sync_with_stdio(0); // Desactiva la sincronización con stdio para mejorar la eficiencia
+    cin.tie(0); // Desenlaza cin de cout para mejorar la eficiencia
+
+    int numConjuntos;
+    cin >> numConjuntos;
+    while (numConjuntos--) {
+        procesarConjunto();
     }
 
     return 0;
